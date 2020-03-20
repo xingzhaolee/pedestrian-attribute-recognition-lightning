@@ -5,7 +5,7 @@ Plain model based on ResNet family.
 
 ## Results
 
-### Baseline
+### Basic
 
 #### RAP
 | Model | mA | Accuracy | Precision | Recall | F1 |
