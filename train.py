@@ -16,6 +16,8 @@ torch.backends.cudnn.deterministic = True
 def main(hparams):
     if hparams.model == 'Basic':
         from modules.basic import BasicModel as Module
+    elif hparams.model == 'VAC':
+        from modules.visual_attention_consistency import VisualAttentionConsistency as Module
     model = Module(hparams)
 
     if hparams.evaluate:
@@ -128,7 +130,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-model',
         type=str,
-        choices=['Basic'],
+        choices=['Basic', 'VAC'],
         required=True,
         help="model to be used"
     )
@@ -167,6 +169,8 @@ if __name__ == '__main__':
     tmp = parser.parse_known_args()[0]
     if tmp.model == 'Basic':
         from modules.basic import BasicModel as Module
+    elif tmp.model == 'VAC':
+        from modules.visual_attention_consistency import VisualAttentionConsistency as Module
     parser = Module.add_model_specific_args(parser)
 
     hyperparams = parser.parse_args()
