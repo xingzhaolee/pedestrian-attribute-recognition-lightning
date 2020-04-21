@@ -87,7 +87,7 @@ class BasicModel(LightningModule):
 
     @staticmethod
     def add_model_specific_args(parent):
-        parser = ArgumentParser(parents=[parent])
+        parser = ArgumentParser(parents=[parent], add_help=False)
 
         parser.add_argument(
             '-backbone',

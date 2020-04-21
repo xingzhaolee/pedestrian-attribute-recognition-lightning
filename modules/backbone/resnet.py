@@ -5,10 +5,14 @@ from torchvision import models
 
 def resnet(variant, pretrained=True):
     backbone = getattr(models, variant)(pretrained=pretrained)
-    return Backbone(backbone), backbone.fc.in_features
+    in_features = backbone.fc.in_features
+    
+    backbone = ResNet(backbone)
+    
+    return backbone, in_features
 
 
-class Backbone(nn.Module):
+class ResNet(nn.Module):
 
     def __init__(self, backbone):
         super().__init__()

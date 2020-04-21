@@ -18,6 +18,11 @@ def main(hparams):
         from modules.basic import BasicModel as Module
     model = Module(hparams)
 
+    if hparams.evaluate:
+        trainer = pl.Trainer(gpus=1)
+        trainer.test(Module.load_from_checkpoint(hparams.evaluate))
+        return   
+
     logger = pl.loggers.TensorBoardLogger(
         save_dir=os.path.join(hparams.output_dir, "logs"), name='')
 
@@ -54,7 +59,7 @@ def main(hparams):
 
 if __name__ == '__main__':
     root_dir = os.path.dirname(os.path.realpath(__file__))
-    parser = ArgumentParser(add_help=False)
+    parser = ArgumentParser()
 
     # ================================= Main =================================
     parser.add_argument(
@@ -62,6 +67,12 @@ if __name__ == '__main__':
         default=100,
         type=int,
         help="# of epochs (default: 100)"
+    )
+
+    parser.add_argument(
+        '-evaluate',
+        type=str,
+        help="checkpoint to be evaluated"
     )
 
     parser.add_argument(

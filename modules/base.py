@@ -115,6 +115,28 @@ class LightningModule(pl.LightningModule):
             'progress_bar': tqdm_dict,
             'log': tqdm_dict
         }
+        
+        return result
+
+    def test_step(self, batch, batch_idx):
+        return self.validation_step(batch, batch_idx)
+
+    def test_epoch_end(self, outputs):
+        result = self.validation_epoch_end(outputs)
+
+        # =============================== Logs ===============================
+        result['progress_bar'].update({
+            'test_loss': result['progress_bar'].pop('val_loss'),
+            'test_mA': result['progress_bar'].pop('val_mA'),
+            'test_acc': result['progress_bar'].pop('val_acc'),
+            'test_prec': result['progress_bar'].pop('val_prec'),
+            'test_recall': result['progress_bar'].pop('val_recall'),
+            'test_f1': result['progress_bar'].pop('val_f1'),
+        })
+
+        result['log'] = result['progress_bar']
+        result['test_loss'] = result.pop('val_loss')
+        
         return result
 
     def configure_optimizers(self):
@@ -165,6 +187,10 @@ class LightningModule(pl.LightningModule):
 
     def val_dataloader(self):
         log.info('Validation data loader called.')
+        return self.__dataloader(train=False)
+
+    def test_dataloader(self):
+        log.info('Test data loader called.')
         return self.__dataloader(train=False)
 
 
