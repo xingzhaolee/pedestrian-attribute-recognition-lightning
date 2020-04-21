@@ -1,3 +1,4 @@
+dataset/
 lightning_logs/
 .DS_Store
 *.sh
